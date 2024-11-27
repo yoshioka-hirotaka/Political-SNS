@@ -1,9 +1,0 @@
-{% load static %}
-<html lang="ja">
-  <body>
-    <form method="POST" action="{% url 'accounts:signup' %}">
-      {% csrf_token %} {{ form }}
-      <button type="submit">認証</button>
-    </form>
-  </body>
-</html>

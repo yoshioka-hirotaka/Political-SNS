@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-s+n7)jd(w3e$4kbg#!qu%r=d=*$qr&w4*kx28j%5=n(*=5(8w$'
+SECRET_KEY = 'django-insecure-vo!7m+-wp0vcyhk++g!4x_86)u=nemr%%$2*ow-itb7b!nn0q)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -31,19 +32,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'polls.apps.PollsConfig',
-    'politicians',
+    "facerec.apps.FacerecConfig",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'accounts'
 ]
-
-LOGIN_REDIRECT_URL = "/polls/"
-LOGOUT_REDIRECT_URL = "accounts:login"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -128,11 +124,8 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-)
+# 画像を保存する先の指定
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-import os
-
-MEDIA_URL = '/media/'  # 画像ファイルをアクセスするURL
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # 画像を保存するディレクトリ
+# 画像をdjango側で読み込むための設定
+MEDIA_URL = '/media/'
