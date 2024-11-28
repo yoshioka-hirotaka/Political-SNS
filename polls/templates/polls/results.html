@@ -1,0 +1,14 @@
+<h1>{{ election.election }}</h1>
+
+<ul>
+{% for politician in election.politician_set.all %}
+   <li>{{ politician.Name }} -- {{ politician.votes }} vote{{ politician.votes|pluralize }}</li>
+{% endfor %}
+</ul>
+
+<h1>投票は完了しました。ページを閉じて終了してください</h1>
+<a href="{% url 'polls:index' %}">Vote again?</a>
+<form action="{% url 'accounts:logout' %}" method="post" name="logout">
+   {% csrf_token %}
+   <button type="submit">Log_out</button>
+ </form>

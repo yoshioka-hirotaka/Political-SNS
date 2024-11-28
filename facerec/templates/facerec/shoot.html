@@ -1,0 +1,13 @@
+<html lang="ja">
+  <head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" type="text/css" >
+    <title>顔撮影</title>
+  </head>
+  <body>
+    <h1>顔写真を撮影します</h1>
+    <iframe id="capture-view" src="{% url 'facerec:capture' election.id %}"></iframe>
+    <h2><a href="{% url 'facerec:upload' election.id %}">写真撮影</a></h2>
+  </body>
+</html>

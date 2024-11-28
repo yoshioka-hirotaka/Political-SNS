@@ -1,0 +1,18 @@
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <title>顔認証</title>
+  </head>
+  <body>
+    <img src="/media/face_images/test/test.jpg?<?php echo date('YmdHis'); ?>" alt="顔認証使用画像" />
+    <h2><a href="{% url 'facerec:reco' election.id %}">顔認証</a></h2>
+    <!--
+    <h1>顔写真をアップロードしてください</h1>
+    <form enctype="multipart/form-data" action="{% url 'facerec:upload' election.id %}" method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <input type="submit" value="Upload & 顔認証">
+    </form>
+    -->
+  </body>
+</html>

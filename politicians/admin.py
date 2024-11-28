@@ -1,5 +1,7 @@
 from django.contrib import admin
 from .models import Politician
 
-admin.site.register(Politician)
-# Register your models here.
+class PoliticianAdmin(admin.ModelAdmin):
+    list_display = ["Name", "votes", "pub_date", "was_published_recently"]
+
+admin.site.register(Politician, PoliticianAdmin)

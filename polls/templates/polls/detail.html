@@ -1,0 +1,10 @@
+<form action="{% url 'polls:vote' election.id %}" method="post">
+{% csrf_token %}
+<h1>{{ election.election }}</h1>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+{% for politician in election.politician_set.all %}
+   <input type="radio" name="politician" id="politician{{ forloop.counter }}" value="{{ politician.id }}">
+   <label for="politician{{ forloop.counter }}">{{ politician.Name }}</label><br>
+{% endfor %}
+<input type="submit" value="投票">
+</form>

@@ -1,52 +1,41 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Question, Choice
+from .models import Election, Vote
+from politicians.models import Politician
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
+from django.db.models import F
 
-# Create your views here.
-def hellofunc(request):
-   return HttpResponse("やっほー")
-
-# def index(request):
-#     latest_question_list = Question.objects.order_by('-pub_date')[:5]
-#     output = ', '.join([q.question_text for q in latest_question_list])
-#     return HttpResponse(output)
 def index(request):
-   latest_question_list = Question.objects.order_by('-pub_date')[:5]
-   context = {'latest_question_list': latest_question_list}
+   latest_election_list = Election.objects.order_by('-pub_date')[:10]
+   context = {'latest_election_list': latest_election_list}
    return render(request, 'polls/index.html', context)
 
+def detail(request, election_id):
+   election = get_object_or_404(Election, pk=election_id)  
+   return render(request, 'polls/detail.html', {'election': election})
 
-# def detail(request, question_id):
-#     return HttpResponse("You're looking at question %s." % question_id)
-def detail(request, question_id):
-   question = get_object_or_404(Question, pk=question_id)
-   return render(request, 'polls/detail.html', {'question': question})
-
-
-# def results(request, question_id):
-#     response = "You're looking at the results of question %s."
-#     return HttpResponse(response % question_id)
-def results(request, question_id):
-   question = get_object_or_404(Question, pk=question_id)
-   return render(request, 'polls/results.html', {'question': question})
-#  return HttpResponse("やっほー")
-
-# ...
-def vote(request, question_id):
-   question = get_object_or_404(Question, pk=question_id)
-   try:
-       selected_choice = question.choice_set.get(pk=request.POST['choice'])
-   except (KeyError, Choice.DoesNotExist):
-       # Redisplay the question voting form.
-       return render(request, 'polls/detail.html', {
-           'question': question,
-           'error_message': "You didn't select a choice.",
-       })
+def vote(request, election_id):
+   election = get_object_or_404(Election, pk=election_id)
+   vote = get_object_or_404(Vote, user_name=request.user.id, election=election_id)
+   if vote.vote == 0:
+      try:
+         selected_politician = election.politician_set.get(pk=request.POST['politician'])
+      except (KeyError, Politician.DoesNotExist):
+         # Redisplay the question voting form.
+         return render(request, 'polls/detail.html', {
+              'election': election,
+              'error_message': "You didn't select a politician.",
+         })
+      else:
+         selected_politician.votes = F("votes") + 1
+         selected_politician.save()
+         return HttpResponseRedirect(reverse('polls:results', args=(election.id, )))
    else:
-       selected_choice.votes += 1
-       selected_choice.save()
-       # Always return an HttpResponseRedirect after successfully dealing
-       # with POST data. This prevents data from being posted twice if a
-       # user hits the Back button.
-       return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+      return HttpResponseRedirect(reverse('polls:results', args=(election.id, )))
+
+def results(request, election_id):
+   election = get_object_or_404(Election, pk=election_id)
+   vote = get_object_or_404(Vote, user_name=request.user.id, election=election_id)
+   vote.vote = 1
+   vote.save()
+   return render(request, 'polls/results.html', {'election': election})

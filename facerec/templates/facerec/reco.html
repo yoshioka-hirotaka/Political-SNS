@@ -1,0 +1,10 @@
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <title>顔認証結果</title>
+  </head>
+  <body>
+    <h1>{{ answer }}</h1>
+    <a href="{% url 'polls:detail' election.id %}">投票</a>
+  </body>
+</html>
